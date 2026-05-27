@@ -1,74 +1,56 @@
 <!DOCTYPE html>
+  ctx.beginPath();
+  ctx.moveTo(centerX, 0);
+  ctx.lineTo(centerX, canvas.height);
+  ctx.stroke();
 
-  footer {
-    text-align: center;
-    padding: 30px;
-    border-top: 1px solid rgba(0,255,120,0.2);
-    color: #8effc7;
-  }
+  ctx.beginPath();
+  ctx.moveTo(0, centerY);
+  ctx.lineTo(canvas.width, centerY);
+  ctx.stroke();
 
-  @media (max-width: 700px) {
-    header h1 {
-      font-size: 3rem;
+  const radius = Math.max(canvas.width, canvas.height);
+
+  const sweepX = centerX + Math.cos(angle) * radius;
+  const sweepY = centerY + Math.sin(angle) * radius;
+
+  const gradient = ctx.createLinearGradient(centerX, centerY, sweepX, sweepY);
+  gradient.addColorStop(0, "rgba(0,255,120,0.45)");
+  gradient.addColorStop(1, "rgba(0,255,120,0)");
+
+  ctx.strokeStyle = gradient;
+  ctx.lineWidth = 5;
+
+  ctx.beginPath();
+  ctx.moveTo(centerX, centerY);
+  ctx.lineTo(sweepX, sweepY);
+  ctx.stroke();
+
+  angle += 0.01;
+
+  trails.forEach((trail, index) => {
+    ctx.beginPath();
+    ctx.fillStyle = `rgba(0,255,120,${trail.life})`;
+    ctx.arc(trail.x, trail.y, 6, 0, Math.PI * 2);
+    ctx.fill();
+
+    trail.life -= 0.02;
+
+    if(trail.life <= 0) {
+      trails.splice(index, 1);
     }
-  }
-  </style>
-</head>
-<body>
+  });
 
-<div class="scanlines"></div>
+  ctx.beginPath();
+  ctx.fillStyle = "#00ff88";
+  ctx.arc(mouseX, mouseY, 8, 0, Math.PI * 2);
+  ctx.fill();
 
-<div class="radar-bg">
-  <iframe
-    src="https://tenor.com/embed/20027720"
-    frameborder="0"
-    allowfullscreen>
-  </iframe>
-</div>
+  requestAnimationFrame(drawRadar);
+}
 
-<header>
-  <h1>F1SECRET</h1>
-  <p>TOP SECRET GAMING NETWORK</p>
-</header>
+drawRadar();
 
-<section class="topbar">
-  <input type="text" id="search" placeholder="SEARCH DATABASE...">
-  <button onclick="randomGame()">RANDOM DEPLOYMENT</button>
-</section>
-
-<section class="categories">
-  <button>HOT ZONES</button>
-  <button>RACING</button>
-  <button>ACTION</button>
-  <button>RETRO</button>
-  <button>FLIGHT</button>
-  <button>MULTIPLAYER</button>
-</section>
-
-<section class="games-grid" id="gamesGrid">
-
-  <a class="game-card" href="games/minecraft.html">
-    <img src="https://picsum.photos/300/200?1">
-    <h3>Minecraft</h3>
-  </a>
-
-  <a class="game-card" href="games/sm64.html">
-    <img src="https://picsum.photos/300/200?2">
-    <h3>SM64</h3>
-  </a>
-
-  <a class="game-card" href="games/racing.html">
-    <img src="https://picsum.photos/300/200?3">
-    <h3>Cyber Racing</h3>
-  </a>
-
-</section>
-
-<footer>
-  <p>F1SECRET CLASSIFIED TERMINAL</p>
-</footer>
-
-<script>
 const searchInput = document.getElementById("search");
 const cards = document.querySelectorAll(".game-card");
 
