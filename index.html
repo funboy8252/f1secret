@@ -1,79 +1,107 @@
 <!DOCTYPE html>
-    <button onclick="randomGame()">RANDOM DEPLOYMENT</button>
-  </section>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
 
-  <section class="categories">
-    <button>HOT ZONES</button>
-    <button>RACING</button>
-    <button>ACTION</button>
-    <button>RETRO</button>
-    <button>FLIGHT</button>
-    <button>MULTIPLAYER</button>
-  </section>
+  <style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-  <section class="featured">
-    <h2>FEATURED SIGNAL</h2>
+  body {
+    background: #050505;
+    color: #00ff88;
+    font-family: 'Orbitron', sans-serif;
+    overflow-x: hidden;
+  }
 
-    <div class="featured-card">
-      <img src="https://picsum.photos/800/300" alt="featured game">
+  .scanlines {
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      transparent 0px,
+      rgba(0,255,100,0.04) 2px,
+      transparent 4px
+    );
+    pointer-events: none;
+    z-index: 1000;
+  }
 
-      <div class="featured-info">
-        <h3>Minecraft</h3>
-        <p>Sandbox survival game with endless possibilities.</p>
-        <a href="games/minecraft.html">PLAY NOW</a>
-      </div>
-    </div>
-  </section>
+  .radar-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    opacity: 0.13;
+    overflow: hidden;
+  }
 
-  <section class="games-grid" id="gamesGrid">
+  .radar-bg iframe {
+    width: 100vw !important;
+    height: 100vh !important;
+  }
 
-    <a class="game-card" href="games/minecraft.html">
-      <img src="https://picsum.photos/300/200?1">
-      <h3>Minecraft</h3>
-    </a>
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(circle at center, rgba(0,255,100,0.08), transparent 60%),
+      linear-gradient(rgba(0,255,100,0.03), rgba(0,255,100,0.01));
+    z-index: -1;
+  }
 
-    <a class="game-card" href="games/sm64.html">
-      <img src="https://picsum.photos/300/200?2">
-      <h3>SM64</h3>
-    </a>
+  header {
+    text-align: center;
+    padding: 50px 20px 30px;
+  }
 
-    <a class="game-card" href="games/racing.html">
-      <img src="https://picsum.photos/300/200?3">
-      <h3>Cyber Racing</h3>
-    </a>
+  header h1 {
+    font-size: 5rem;
+    font-weight: 800;
+    text-shadow:
+      0 0 10px #00ff88,
+      0 0 30px #00ff88;
+    letter-spacing: 6px;
+  }
 
-    <a class="game-card" href="games/obby.html">
-      <img src="https://picsum.photos/300/200?4">
-      <h3>Obby Escape</h3>
-    </a>
+  header p {
+    margin-top: 10px;
+    color: #8effc7;
+    letter-spacing: 3px;
+  }
 
-    <a class="game-card" href="games/retro.html">
-      <img src="https://picsum.photos/300/200?5">
-      <h3>Retro Blaster</h3>
-    </a>
+  .topbar {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    padding: 20px;
+    flex-wrap: wrap;
+  }
 
-    <a class="game-card" href="games/fighter.html">
-      <img src="https://picsum.photos/300/200?6">
-      <h3>Jet Assault</h3>
-    </a>
+  .topbar input {
+    width: 350px;
+    max-width: 90%;
+    padding: 15px;
+    border: 2px solid #00ff88;
+    background: rgba(0,0,0,0.8);
+    color: #00ff88;
+    border-radius: 10px;
+    font-family: inherit;
+  }
 
-    <a class="game-card" href="games/runner.html">
-      <img src="https://picsum.photos/300/200?7">
-      <h3>Neon Runner</h3>
-    </a>
+  .topbar button,
+  .categories button,
+  .featured-info a {
+    padding: 14px 22px;
+    background: rgba(0,255,120,0.08);
+    border: 2px solid #00ff88;
+    color: #00ff88;
+    border-radius: 10px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: 0.25s;
+    text-decoration: none;
+  }
 
-    <a class="game-card" href="games/zombie.html">
-      <img src="https://picsum.photos/300/200?8">
-      <h3>Zombie Zone</h3>
-    </a>
-
-  </section>
-
-  <footer>
-    <p>F1SECRET CLASSIFIED TERMINAL</p>
-  </footer>
-
-  <script src="script.js"></script>
-  <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
-</body>
+  .topbar button:hover,
 </html>
