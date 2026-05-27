@@ -1,489 +1,337 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>F1SECRET</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>F1SECRET</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
 
-  <style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+body{
+background:#020202;
+font-family:'Orbitron',sans-serif;
+color:#00ff88;
+overflow-x:hidden;
+}
 
-  body {
-    background: #050505;
-    color: #00ff88;
-    font-family: 'Orbitron', sans-serif;
-    overflow-x: hidden;
-  }
+canvas{
+position:fixed;
+inset:0;
+width:100%;
+height:100%;
+z-index:-2;
+opacity:.35;
+}
 
-  .scanlines {
-    position: fixed;
-    inset: 0;
-    background: repeating-linear-gradient(
-      transparent 0px,
-      rgba(0,255,100,0.04) 2px,
-      transparent 4px
-    );
-    pointer-events: none;
-    z-index: 1000;
-  }
+body::before{
+content:"";
+position:fixed;
+inset:0;
+background:
+linear-gradient(rgba(0,255,120,.03),rgba(0,0,0,.2)),
+repeating-linear-gradient(
+transparent 0px,
+rgba(0,255,100,.03) 2px,
+transparent 4px
+);
+pointer-events:none;
+z-index:-1;
+}
 
-  #radarCanvas {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -2;
-    opacity: 0.35;
-  }
+header{
+padding:50px 20px 30px;
+text-align:center;
+}
 
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(circle at center, rgba(0,255,100,0.08), transparent 60%),
-      linear-gradient(rgba(0,255,100,0.03), rgba(0,255,100,0.01));
-    z-index: -1;
-  }
+header h1{
+font-size:5rem;
+font-weight:800;
+letter-spacing:8px;
+text-shadow:0 0 10px #00ff88,0 0 30px #00ff88;
+}
 
-  header {
-    text-align: center;
-    padding: 50px 20px 30px;
-  }
+header p{
+margin-top:10px;
+color:#9fffcf;
+letter-spacing:4px;
+}
 
-  header h1 {
-    font-size: 5rem;
-    font-weight: 800;
-    text-shadow:
-      0 0 10px #00ff88,
-      0 0 30px #00ff88;
-    letter-spacing: 6px;
-  }
+.topbar{
+display:flex;
+justify-content:center;
+gap:15px;
+padding:20px;
+flex-wrap:wrap;
+}
 
-  header p {
-    margin-top: 10px;
-    color: #8effc7;
-    letter-spacing: 3px;
-  }
+.topbar input{
+width:400px;
+max-width:90%;
+padding:16px;
+background:rgba(0,0,0,.75);
+border:2px solid #00ff88;
+border-radius:14px;
+color:#00ff88;
+font-family:inherit;
+outline:none;
+box-shadow:0 0 20px rgba(0,255,120,.15);
+}
 
-  .topbar {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    padding: 20px;
-    flex-wrap: wrap;
-  }
+.topbar button{
+padding:16px 24px;
+background:rgba(0,255,120,.08);
+border:2px solid #00ff88;
+border-radius:14px;
+color:#00ff88;
+font-family:inherit;
+cursor:pointer;
+transition:.25s;
+}
 
-  .topbar input {
-    width: 350px;
-    max-width: 90%;
-    padding: 15px;
-    border: 2px solid #00ff88;
-    background: rgba(0,0,0,0.8);
-    color: #00ff88;
-    border-radius: 10px;
-    font-family: inherit;
-  }
+.topbar button:hover{
+background:#00ff88;
+color:black;
+box-shadow:0 0 20px #00ff88;
+transform:translateY(-2px);
+}
 
-  .topbar button,
-  .categories button,
-  .featured-info a {
-    padding: 14px 22px;
-    background: rgba(0,255,120,0.08);
-    border: 2px solid #00ff88;
-    color: #00ff88;
-    border-radius: 10px;
-    font-family: inherit;
-    cursor: pointer;
-    transition: 0.25s;
-    text-decoration: none;
-  }
+.categories{
+display:flex;
+justify-content:center;
+flex-wrap:wrap;
+gap:10px;
+padding:0 20px 35px;
+}
 
-  .topbar button:hover,
-  .categories button:hover,
-  .featured-info a:hover {
-    background: #00ff88;
-    color: black;
-    box-shadow: 0 0 20px #00ff88;
-  }
+.categories button{
+padding:12px 18px;
+background:rgba(0,255,120,.05);
+border:1px solid rgba(0,255,120,.3);
+color:#00ff88;
+border-radius:10px;
+font-family:inherit;
+}
 
-  .categories {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    padding: 10px 20px 30px;
-  }
+.games-grid{
+width:min(1500px,95%);
+margin:auto;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:25px;
+padding-bottom:80px;
+}
 
-  .featured {
-    width: min(1200px, 92%);
-    margin: auto;
-    margin-bottom: 40px;
-  }
+.game-card{
+background:rgba(0,0,0,.72);
+border:1px solid rgba(0,255,120,.18);
+border-radius:22px;
+overflow:hidden;
+text-decoration:none;
+color:#00ff88;
+transition:.25s;
+backdrop-filter:blur(8px);
+box-shadow:0 0 25px rgba(0,255,120,.06);
+}
 
-  .featured h2 {
-    margin-bottom: 20px;
-  }
+.game-card:hover{
+transform:translateY(-8px) scale(1.03);
+border-color:#00ff88;
+box-shadow:0 0 25px rgba(0,255,120,.4);
+}
 
-  .featured-card {
-    background: rgba(0,0,0,0.7);
-    border: 2px solid rgba(0,255,120,0.25);
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 0 20px rgba(0,255,120,0.2);
-  }
+.game-card img{
+width:100%;
+aspect-ratio:1/1;
+object-fit:cover;
+border-bottom:1px solid rgba(0,255,120,.2);
+}
 
-  .featured-card img {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-  }
+.game-card h3{
+padding:18px;
+text-align:center;
+font-size:1rem;
+}
 
-  .featured-info {
-    padding: 25px;
-  }
+footer{
+text-align:center;
+padding:35px;
+color:#9fffcf;
+border-top:1px solid rgba(0,255,120,.15);
+}
 
-  .featured-info h3 {
-    font-size: 2rem;
-    margin-bottom: 10px;
-  }
-
-  .featured-info p {
-    margin-bottom: 20px;
-    color: #b4ffd9;
-  }
-
-  .games-grid {
-    width: min(1400px, 95%);
-    margin: auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-    gap: 25px;
-    padding-bottom: 70px;
-  }
-
-  .game-card {
-    background: rgba(0,0,0,0.75);
-    border: 2px solid rgba(0,255,120,0.2);
-    border-radius: 18px;
-    overflow: hidden;
-    text-decoration: none;
-    color: #00ff88;
-    transition: 0.25s;
-  }
-
-  .game-card:hover {
-    transform: translateY(-8px) scale(1.03);
-    border-color: #00ff88;
-    box-shadow: 0 0 20px rgba(0,255,120,0.45);
-  }
-
-  .game-card img {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-  }
-
-  .game-card h3 {
-    padding: 18px;
-    text-align: center;
-  }
-
-  footer {
-    text-align: center;
-    padding: 30px;
-    border-top: 1px solid rgba(0,255,120,0.2);
-    color: #8effc7;
-  }
-
-  @media (max-width: 700px) {
-    header h1 {
-      font-size: 3rem;
-    }
-  }
-  </style>
+@media(max-width:700px){
+header h1{
+font-size:3rem;
+}
+}
+</style>
 </head>
 <body>
 
-<div class="scanlines"></div>
-
-<canvas id="radarCanvas"></canvas>
+<canvas id="radar"></canvas>
 
 <header>
-  <h1>F1SECRET</h1>
-  <p>TOP SECRET GAMING NETWORK</p>
+<h1>F1SECRET</h1>
+<p>TOP SECRET GAMING NETWORK</p>
 </header>
 
 <section class="topbar">
-  <input type="text" id="search" placeholder="SEARCH DATABASE...">
-  <button onclick="randomGame()">RANDOM DEPLOYMENT</button>
+<input type="text" id="search" placeholder="SEARCH DATABASE...">
+<button onclick="randomGame()">RANDOM DEPLOYMENT</button>
 </section>
 
 <section class="categories">
-  <button>HOT ZONES</button>
-  <button>RACING</button>
-  <button>ACTION</button>
-  <button>RETRO</button>
-  <button>FLIGHT</button>
-  <button>MULTIPLAYER</button>
+<button>HOT ZONES</button>
+<button>ACTION</button>
+<button>RACING</button>
+<button>RETRO</button>
+<button>MULTIPLAYER</button>
+<button>ARCADE</button>
 </section>
 
 <section class="games-grid" id="gamesGrid">
-
-  <a class="game-card" href="games/Amaze.html">
-    <img src="images/Amaze.png">
-    <h3>Amaze</h3>
-  </a>
-
-  <a class="game-card" href="games/BLOXORZ.html">
-    <img src="images/BLOXORZ.png">
-    <h3>BLOXORZ</h3>
-  </a>
-
-  <a class="game-card" href="games/Backflipdive3D.html">
-    <img src="images/backflipDive3D.png">
-    <h3>Backflip Dive 3D</h3>
-  </a>
-
-  <a class="game-card" href="games/BounceMasters.html">
-    <img src="images/Bounce Masters.png">
-    <h3>Bounce Masters</h3>
-  </a>
-
-  <a class="game-card" href="games/ClusterRush.html">
-    <img src="images/Cluster rush.png">
-    <h3>Cluster Rush</h3>
-  </a>
-
-  <a class="game-card" href="games/CookieClicker.html">
-    <img src="images/Cookie Clicker.png">
-    <h3>Cookie Clicker</h3>
-  </a>
-
-  <a class="game-card" href="games/CrazyCatle3D.html">
-    <img src="images/CrazyCattle3D.png">
-    <h3>Crazy Cattle 3D</h3>
-  </a>
-
-  <a class="game-card" href="games/CrossyRoad.html">
-    <img src="images/Crossy Road.png">
-    <h3>Crossy Road</h3>
-  </a>
-
-  <a class="game-card" href="games/DriveMad.html">
-    <img src="images/Drive Mad.png">
-    <h3>Drive Mad</h3>
-  </a>
-
-  <a class="game-card" href="games/FreeRiderJumps.html">
-    <img src="images/Free rider Jumps.png">
-    <h3>Free Rider Jumps</h3>
-  </a>
-
-  <a class="game-card" href="games/HillClimbRacing">
-    <img src="images/Hill Climb Racing.png">
-    <h3>Hill Climb Racing</h3>
-  </a>
-
-  <a class="game-card" href="games/MagicTiles3.html">
-    <img src="images/Magic tiles 3.png">
-    <h3>Magic Tiles 3</h3>
-  </a>
-
-  <a class="game-card" href="games/PeoplePlayground.html">
-    <img src="images/People Playgrond.png">
-    <h3>People Playground</h3>
-  </a>
-
-  <a class="game-card" href="games/SmashKarts">
-    <img src="images/Smashy Karts.png">
-    <h3>Smash Karts</h3>
-  </a>
-
-  <a class="game-card" href="games/SnowRider">
-    <img src="images/Snow Rider 3D.png">
-    <h3>Snow Rider 3D</h3>
-  </a>
-
-  <a class="game-card" href="games/SoundBoard">
-    <img src="images/soundboard.png">
-    <h3>Sound Board</h3>
-  </a>
-
-  <a class="game-card" href="games/SubwaySurfers">
-    <img src="images/Subway Surfers.png">
-    <h3>Subway Surfers</h3>
-  </a>
-
-  <a class="game-card" href="games/TombOfTheMask.html">
-    <img src="https://picsum.photos/300/300?random=18">
-    <h3>Tomb Of The Mask</h3>
-  </a>
-
-  <a class="game-card" href="games/blockBlast.html">
-    <img src="images/BlockBlast.png">
-    <h3>Block Blast</h3>
-  </a>
-
-  <a class="game-card" href="games/blookethaks.html">
-    <img src="images/BlooketHaks.png">
-    <h3>Blooket Hacks</h3>
-  </a>
-
-  <a class="game-card" href="games/daddyLongLegs.html">
-    <img src="images/Dasddy Long Legs.png">
-    <h3>Daddy Long Legs</h3>
-  </a>
-
-  <a class="game-card" href="games/dune.html">
-    <img src="images/Dune.png">
-    <h3>Dune</h3>
-  </a>
-
-  <a class="game-card" href="games/geometryDash">
-    <img src="images/Geometry Dash Lite.png">
-    <h3>Geometry Dash Lite</h3>
-  </a>
-
-  <a class="game-card" href="games/slope.html">
-    <img src="images/Slope.png">
-    <h3>Slope</h3>
-  </a>
-
+<a class="game-card" href="games/Amaze.html"><img src="images/Amaze.png"><h3>Amaze</h3></a>
+<a class="game-card" href="games/BLOXORZ.html"><img src="images/BLOXORZ.png"><h3>BLOXORZ</h3></a>
+<a class="game-card" href="games/Backflipdive3D.html"><img src="images/backflipDive3D.png"><h3>Backflip Dive 3D</h3></a>
+<a class="game-card" href="games/BounceMasters.html"><img src="images/Bounce Masters.png"><h3>Bounce Masters</h3></a>
+<a class="game-card" href="games/ClusterRush.html"><img src="images/Cluster rush.png"><h3>Cluster Rush</h3></a>
+<a class="game-card" href="games/CookieClicker.html"><img src="images/Cookie Clicker.png"><h3>Cookie Clicker</h3></a>
+<a class="game-card" href="games/CrazyCatle3D.html"><img src="images/CrazyCattle3D.png"><h3>Crazy Cattle 3D</h3></a>
+<a class="game-card" href="games/CrossyRoad.html"><img src="images/Crossy Road.png"><h3>Crossy Road</h3></a>
+<a class="game-card" href="games/DriveMad.html"><img src="images/Drive Mad.png"><h3>Drive Mad</h3></a>
+<a class="game-card" href="games/FreeRiderJumps.html"><img src="images/Free rider Jumps.png"><h3>Free Rider Jumps</h3></a>
+<a class="game-card" href="games/HillClimbRacing.html"><img src="images/Hill Climb Racing.png"><h3>Hill Climb Racing</h3></a>
+<a class="game-card" href="games/MagicTiles3.html"><img src="images/Magic tiles 3.png"><h3>Magic Tiles 3</h3></a>
+<a class="game-card" href="games/PeoplePlayground.html"><img src="images/People Playgrond.png"><h3>People Playground</h3></a>
+<a class="game-card" href="games/SmashKarts.html"><img src="images/Smashy Karts.png"><h3>Smash Karts</h3></a>
+<a class="game-card" href="games/SnowRider.html"><img src="images/Snow Rider 3D.png"><h3>Snow Rider 3D</h3></a>
+<a class="game-card" href="games/SoundBoard.html"><img src="images/soundboard.png"><h3>Sound Board</h3></a>
+<a class="game-card" href="games/SubwaySurfers.html"><img src="images/Subway Surfers.png"><h3>Subway Surfers</h3></a>
+<a class="game-card" href="games/TombOfTheMask.html"><img src="images/BlockBlast.png"><h3>Tomb Of The Mask</h3></a>
+<a class="game-card" href="games/blockBlast.html"><img src="images/BlockBlast.png"><h3>Block Blast</h3></a>
+<a class="game-card" href="games/blookethaks.html"><img src="images/BlooketHaks.png"><h3>Blooket Hacks</h3></a>
+<a class="game-card" href="games/daddyLongLegs.html"><img src="images/Dasddy Long Legs.png"><h3>Daddy Long Legs</h3></a>
+<a class="game-card" href="games/dune.html"><img src="images/Dune.png"><h3>Dune</h3></a>
+<a class="game-card" href="games/geometryDash.html"><img src="images/Geometry Dash Lite.png"><h3>Geometry Dash</h3></a>
+<a class="game-card" href="games/slope.html"><img src="images/Slope.png"><h3>Slope</h3></a>
 </section>
 
 <footer>
-  <p>F1SECRET CLASSIFIED TERMINAL</p>
+<p>F1SECRET CLASSIFIED TERMINAL</p>
 </footer>
 
 <script>
-const canvas = document.getElementById("radarCanvas");
-const ctx = canvas.getContext("2d");
+const searchInput=document.getElementById('search');
+const cards=document.querySelectorAll('.game-card');
 
-let mouseX = window.innerWidth / 2;
-let mouseY = window.innerHeight / 2;
-let angle = 0;
-const trails = [];
+searchInput.addEventListener('keyup',()=>{
+const value=searchInput.value.toLowerCase();
 
-function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-
-resizeCanvas();
-window.addEventListener("resize", resizeCanvas);
-
-window.addEventListener("mousemove", (e) => {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
-
-  trails.push({
-    x: mouseX,
-    y: mouseY,
-    life: 1
-  });
+cards.forEach(card=>{
+const title=card.innerText.toLowerCase();
+card.style.display=title.includes(value)?'block':'none';
+});
 });
 
-function drawRadar() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  const centerX = canvas.width / 2;
-  const centerY = canvas.height / 2;
-
-  ctx.strokeStyle = "rgba(0,255,120,0.15)";
-  ctx.lineWidth = 1;
-
-  for(let r = 100; r < canvas.width; r += 100) {
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, r, 0, Math.PI * 2);
-    ctx.stroke();
-  }
-
-  ctx.beginPath();
-  ctx.moveTo(centerX, 0);
-  ctx.lineTo(centerX, canvas.height);
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.moveTo(0, centerY);
-  ctx.lineTo(canvas.width, centerY);
-  ctx.stroke();
-
-  const radius = Math.max(canvas.width, canvas.height);
-
-  const sweepX = centerX + Math.cos(angle) * radius;
-  const sweepY = centerY + Math.sin(angle) * radius;
-
-  const gradient = ctx.createLinearGradient(centerX, centerY, sweepX, sweepY);
-  gradient.addColorStop(0, "rgba(0,255,120,0.45)");
-  gradient.addColorStop(1, "rgba(0,255,120,0)");
-
-  ctx.strokeStyle = gradient;
-  ctx.lineWidth = 5;
-
-  ctx.beginPath();
-  ctx.moveTo(centerX, centerY);
-  ctx.lineTo(sweepX, sweepY);
-  ctx.stroke();
-
-  angle += 0.01;
-
-  trails.forEach((trail, index) => {
-    ctx.beginPath();
-    ctx.fillStyle = `rgba(0,255,120,${trail.life})`;
-    ctx.arc(trail.x, trail.y, 6, 0, Math.PI * 2);
-    ctx.fill();
-
-    trail.life -= 0.02;
-
-    if(trail.life <= 0) {
-      trails.splice(index, 1);
-    }
-  });
-
-  ctx.beginPath();
-  ctx.fillStyle = "#00ff88";
-  ctx.arc(mouseX, mouseY, 8, 0, Math.PI * 2);
-  ctx.fill();
-
-  requestAnimationFrame(drawRadar);
+function randomGame(){
+const games=Array.from(cards);
+const random=games[Math.floor(Math.random()*games.length)];
+window.location.href=random.href;
 }
 
-drawRadar();
+const canvas=document.getElementById('radar');
+const ctx=canvas.getContext('2d');
 
-const searchInput = document.getElementById("search");
-const cards = document.querySelectorAll(".game-card");
+let mouseX=window.innerWidth/2;
+let mouseY=window.innerHeight/2;
+let angle=0;
+const trails=[];
 
-searchInput.addEventListener("keyup", () => {
-  const value = searchInput.value.toLowerCase();
+function resize(){
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+}
 
-  cards.forEach(card => {
-    const title = card.innerText.toLowerCase();
+resize();
+window.addEventListener('resize',resize);
 
-    if(title.includes(value)) {
-      card.style.display = "block";
-    } else {
-      card.style.display = "none";
-    }
-  });
+window.addEventListener('mousemove',e=>{
+mouseX=e.clientX;
+mouseY=e.clientY;
+trails.push({x:mouseX,y:mouseY,life:1});
 });
 
-function randomGame() {
-  const games = Array.from(cards);
-  const random = games[Math.floor(Math.random() * games.length)];
+function animate(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  window.location.href = random.href;
+const cx=canvas.width/2;
+const cy=canvas.height/2;
+
+ctx.strokeStyle='rgba(0,255,120,.08)';
+ctx.lineWidth=1;
+
+for(let r=80;r<canvas.width;r+=80){
+ctx.beginPath();
+ctx.arc(cx,cy,r,0,Math.PI*2);
+ctx.stroke();
 }
+
+ctx.beginPath();
+ctx.moveTo(cx,0);
+ctx.lineTo(cx,canvas.height);
+ctx.stroke();
+
+ctx.beginPath();
+ctx.moveTo(0,cy);
+ctx.lineTo(canvas.width,cy);
+ctx.stroke();
+
+const radius=Math.max(canvas.width,canvas.height);
+const sx=cx+Math.cos(angle)*radius;
+const sy=cy+Math.sin(angle)*radius;
+
+const gradient=ctx.createLinearGradient(cx,cy,sx,sy);
+gradient.addColorStop(0,'rgba(0,255,120,.4)');
+gradient.addColorStop(1,'rgba(0,255,120,0)');
+
+ctx.strokeStyle=gradient;
+ctx.lineWidth=4;
+ctx.beginPath();
+ctx.moveTo(cx,cy);
+ctx.lineTo(sx,sy);
+ctx.stroke();
+
+angle+=0.01;
+
+trails.forEach((trail,index)=>{
+ctx.beginPath();
+ctx.fillStyle=`rgba(0,255,120,${trail.life})`;
+ctx.arc(trail.x,trail.y,6,0,Math.PI*2);
+ctx.fill();
+trail.life-=0.02;
+if(trail.life<=0){
+trails.splice(index,1);
+}
+});
+
+ctx.beginPath();
+ctx.fillStyle='#00ff88';
+ctx.arc(mouseX,mouseY,8,0,Math.PI*2);
+ctx.fill();
+
+requestAnimationFrame(animate);
+}
+
+animate();
 </script>
-
 
 </body>
 </html>
